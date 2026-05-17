@@ -1,0 +1,23 @@
+## macOS finder metadata
+**/.DS_Store
+
+## node
+node_modules
+.svelte-kit
+build
+dist
+.vercel
+package
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+## nix
+.direnv
+result
+result-*
+
+## env / tools
+.env
+.env.*
+!.env.example
+*local.json

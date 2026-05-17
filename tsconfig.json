@@ -8,10 +8,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "strict": true,
-    "paths": {
-      "@qezta/ui/*": ["../../packages/ui/src/*"]
-    }
+    "strict": true
   },
-  "include": ["../../packages/ui/src/ambient.d.ts"]
+  "include": ["node_modules/@qezta/ui/src/ambient.d.ts"]
 }
