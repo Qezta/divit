@@ -1,0 +1,10 @@
+# Divit Mittal
+
+> Divit Mittal's personal portfolio site, including a RAG-powered digital avatar for questions about Divit's background, projects, and skills.
+
+## Site
+
+- [Home](https://divit.qezta.com/): Portfolio and digital avatar entry point.
+- [Qezta](https://qezta.com/): Landing site connected to this portfolio.
+- [Sitemap](https://divit.qezta.com/sitemap.xml): XML sitemap for crawlable site URLs.
+- [Robots](https://divit.qezta.com/robots.txt): Crawler access policy.
