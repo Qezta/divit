@@ -9,6 +9,5 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true
-  },
-  "include": ["node_modules/@qezta/ui/src/ambient.d.ts"]
+  }
 }

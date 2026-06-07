@@ -1,0 +1,8 @@
+allowBuilds:
+  '@google/genai': true
+  '@parcel/watcher': true
+  esbuild: true
+  protobufjs: true
+minimumReleaseAgeExclude:
+  - '@sveltejs/kit@2.63.1'
+  - svelte@5.56.3

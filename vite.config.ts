@@ -1,14 +1,8 @@
-import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 
-export default defineConfig({
-  plugins: [sveltekit()],
-  base: '/',
-  css: {
-    preprocessorOptions: {
-      scss: {
-        api: 'modern',
-      }
-    }
+export default {
+  plugins: await sveltekit(),
+  test: {
+    include: ['src/**/*.{test,spec}.{js,ts}']
   }
-});
+};
