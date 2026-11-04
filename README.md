@@ -17,7 +17,7 @@
         <img src="https://img.shields.io/github/repo-size/Qezta/divit?&style=for-the-badge&logoColor=white&color=purple&logo=github" alt="size"/>
     </a>
     <a href="https://github.com/Qezta/divit/blob/main/LICENSE">
-        <img src="https://img.shields.io/github/license/Qezta/divit?&style=for-the-badge&logoColor=white&color=purple&logo=unlicense" alt="license"/>
+        <img src="https://img.shields.io/badge/license-HONCL--1.0-purple?style=for-the-badge&logo=unlicense&logoColor=white" alt="license"/>
     </a>
     <a href="https://github.com/nixos/nixpkgs">
         <img src="https://img.shields.io/badge/Nixpkgs-unstable-blue.svg?style=for-the-badge&logo=NixOS&logoColor=white&color=purple" alt="nixpkgs"/>
@@ -108,7 +108,7 @@ In Vercel, set `GEMINI_API_KEY` in the project's environment variables.
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+HONCL-1.0 — see [LICENSE](./LICENSE).
 
 <div align="right">
 
