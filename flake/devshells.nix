@@ -27,6 +27,11 @@
             nixd
             alejandra
             ;
+          ## Deploys (Vercel); not packaged in nixpkgs, so run a pinned release
+          ## via `pnpm dlx` (same approach as OS-nixCfg's mkPnpmDlxBin).
+          vercel = pkgs.writeShellScriptBin "vercel" ''
+            exec ${pkgs.pnpm}/bin/pnpm dlx vercel@65.9.0 "$@"
+          '';
         };
       };
     };
