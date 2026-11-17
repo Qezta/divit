@@ -45,6 +45,7 @@
 
 - [Overview](#overview)
 - [Stack](#stack)
+- [How the chatbot works](#how-the-chatbot-works)
 - [Development](#development)
 - [Environment](#environment)
 - [License](#license)
@@ -64,6 +65,25 @@ and skills.
 - **Three.js** WebGL cursor
 - **Google Gemini 2.0 Flash** via `@google/genai` for the chatbot
 - Shared design system: [`@qezta/ui`](https://github.com/qezta/ui) (git dep, pinned to a tag)
+
+## How the chatbot works
+
+```mermaid
+sequenceDiagram
+  actor V as Visitor
+  participant C as Chatbot (@qezta/ui)
+  participant A as POST /api/chat
+  participant R as rag.ts
+  participant G as Gemini 2.0 Flash
+  V->>C: question
+  C->>A: messages
+  A->>R: retrieveContext(last message)
+  R-->>A: top 4 knowledge-base chunks<br/>(keyword-overlap scoring)
+  A->>G: system prompt + context + messages
+  G-->>A: streamed answer
+  A-->>C: stream
+  C-->>V: answer
+```
 
 ## Development
 
