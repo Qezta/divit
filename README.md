@@ -1,40 +1,57 @@
 <div id="top">
     <div align="center">
-  <h1 align='center'>divit.qezta.com</h1>
-  <strong>Personal portfolio site for Divit Mittal with a RAG-powered digital avatar.</strong>
+        <img alt='An abstract image of a donut-like object' title='Qezta' height=250 width=250 src='https://qezta.com/qezta.gif' />
+        <h1 align='center'>divit</h1>
+        <strong>divit.qezta.com: personal portfolio with Gemini-powered RAG chatbot</strong>
     </div>
+
 </div>
 
 ---
 
 <div align='center'>
-    <a href="https://divit.qezta.com/">
-  <img src="https://img.shields.io/badge/site-divit.qezta.com-orange?style=for-the-badge&logo=svelte&logoColor=white" alt="site" />
+    <a href="https://github.com/Qezta/divit/stargazers">
+        <img src="https://img.shields.io/github/stars/Qezta/divit?&style=for-the-badge&logoColor=white&color=purple&logo=starship" alt="stars"/>
+    </a>
+    <a href="https://github.com/Qezta/divit/">
+        <img src="https://img.shields.io/github/repo-size/Qezta/divit?&style=for-the-badge&logoColor=white&color=purple&logo=github" alt="size"/>
     </a>
     <a href="https://github.com/Qezta/divit/blob/main/LICENSE">
-  <img src="https://img.shields.io/badge/license-MIT-orange?style=for-the-badge&logo=unlicense&logoColor=white" alt="license"/>
+        <img src="https://img.shields.io/github/license/Qezta/divit?&style=for-the-badge&logoColor=white&color=purple&logo=unlicense" alt="license"/>
     </a>
-    <a href="https://svelte.dev/">
-  <img src="https://img.shields.io/badge/SvelteKit-Vercel-orange?style=for-the-badge&logo=svelte&logoColor=white" alt="sveltekit"/>
+    <a href="https://github.com/nixos/nixpkgs">
+        <img src="https://img.shields.io/badge/Nixpkgs-unstable-blue.svg?style=for-the-badge&logo=NixOS&logoColor=white&color=purple" alt="nixpkgs"/>
     </a>
-    <img src="https://img.shields.io/badge/language-TypeScript-orange?style=for-the-badge&logo=typescript&logoColor=white" alt="repo-top-language"/>
+    <a href="https://divit.qezta.com">
+        <img src="https://img.shields.io/badge/site-divit.qezta.com-purple.svg?style=for-the-badge&logo=googlechrome&logoColor=white" alt="site"/>
+    </a>
+    <img src="https://img.shields.io/github/languages/top/Qezta/divit?style=for-the-badge&color=purple" alt="repo-top-language"/>
 </div>
 
 ---
 
 <div align='center'>
     <a href="https://github.com/Qezta/divit/actions/workflows/flake-check.yml">
-  <img src="https://github.com/Qezta/divit/actions/workflows/flake-check.yml/badge.svg" alt="nix-flake-check"/>
+        <img src="https://github.com/Qezta/divit/actions/workflows/flake-check.yml/badge.svg" alt="flake-check"/>
     </a>
     <a href="https://github.com/Qezta/divit/actions/workflows/gen-sitemap.yml">
-  <img src="https://github.com/Qezta/divit/actions/workflows/gen-sitemap.yml/badge.svg" alt="gen-sitemap"/>
-    </a>
-    <a href="https://github.com/Qezta/divit/actions/workflows/flake-lock-update.yml">
-  <img src="https://github.com/Qezta/divit/actions/workflows/flake-lock-update.yml/badge.svg" alt="nix-flake-lock-update"/>
+        <img src="https://github.com/Qezta/divit/actions/workflows/gen-sitemap.yml/badge.svg" alt="gen-sitemap"/>
     </a>
 </div>
 
 ---
+
+## Contents
+
+- [Overview](#overview)
+- [Stack](#stack)
+- [Development](#development)
+- [Environment](#environment)
+- [License](#license)
+
+---
+
+## Overview
 
 Personal portfolio site for Divit Mittal, deployed at
 [divit.qezta.com](https://divit.qezta.com). Includes a RAG-powered chatbot
@@ -71,3 +88,11 @@ In Vercel, set `GEMINI_API_KEY` in the project's environment variables.
 ## License
 
 MIT — see [LICENSE](./LICENSE).
+
+<div align="right">
+
+[![][back-to-top]](#top)
+
+</div>
+
+[back-to-top]: https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square&color=purple
