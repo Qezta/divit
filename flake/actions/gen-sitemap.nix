@@ -1,52 +1,60 @@
-{common-permissions, ...}: {
+_: {
   flake.actions-nix.workflows.".github/workflows/gen-sitemap.yml" = {
     on = {
       push = {
         branches = ["main"];
         paths-ignore = [
-          "**/*.md"
           ".github/**"
-        ];
-      };
-      pull_request = {
-        branches = ["main"];
-        paths-ignore = [
-          "**/*.md"
-          ".github/**"
+          # Merging a sitemap update must not start another update.
+          "static/sitemap.xml"
         ];
       };
       workflow_dispatch = {};
     };
 
+    concurrency = {
+      group = "sitemap-update";
+      cancel-in-progress = false;
+    };
+
     jobs.gen-sitemap = {
-      permissions = common-permissions;
+      # Manual dispatches from other branches must not run with write access.
+      "if" = "github.ref == 'refs/heads/main'";
+      permissions = {
+        contents = "write";
+        pull-requests = "write";
+      };
       steps = [
         {
-          name = "Checkout repo";
-          uses = "actions/checkout@main";
-          "with".fetch-depth = 1;
-        }
-        {
-          name = "Generate the sitemap";
-          uses = "cicirello/generate-sitemap@v1";
+          name = "Checkout main";
+          uses = "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"; # v7.0.1
           "with" = {
-            base-url-path = "https://divit.qezta.com/";
-            sitemap-path = "static/sitemap.xml";
+            ref = "main";
+            # The generator uses each file's last commit date for lastmod.
+            fetch-depth = 0;
+            persist-credentials = false;
           };
         }
         {
-          name = "Commit and push sitemap";
+          name = "Generate the sitemap";
           run = ''
-            if [[ `git status --porcelain static/sitemap.xml` ]]; then
-              git config --global user.name 'github-actions'
-              git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-              git add static/sitemap.xml
-              git commit -m "Automated sitemap update for ''${{ github.ref_name }}" static/sitemap.xml
-              git push
-            else
-              echo "No changes to sitemap.xml"
-            fi
+            PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts -p 'test_*.py'
+            python3 scripts/generate_sitemap.py --base-url https://divit.qezta.com/
           '';
+        }
+        {
+          name = "Create or update sitemap pull request";
+          uses = "peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1"; # v8.1.3
+          "with" = {
+            base = "main";
+            branch = "automation/update-sitemap";
+            add-paths = "static/sitemap.xml";
+            commit-message = "chore(sitemap): update sitemap";
+            title = "chore(sitemap): update sitemap";
+            body = "Update static/sitemap.xml using the sitemap generator.";
+            author = "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>";
+            delete-branch = true;
+          };
         }
       ];
     };
