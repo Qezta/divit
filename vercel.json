@@ -1,6 +1,4 @@
 {
-  "buildCommand": "cd ../.. && pnpm install && pnpm --filter @qezta/divit-site build",
-  "installCommand": "pnpm install",
   "framework": "sveltekit",
-  "ignoreCommand": "git diff HEAD^ HEAD --quiet . ../../packages ../../pnpm-lock.yaml"
+  "ignoreCommand": "git diff HEAD^ HEAD --quiet -- . ':(exclude)*.md' ':(exclude).github' ':(exclude)flake' ':(exclude)flake.nix' ':(exclude)flake.lock'"
 }
