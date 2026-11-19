@@ -3,5 +3,5 @@
   import Terminal from '$lib/components/Terminal.svelte';
 </script>
 
-<Card />
+<Card sourceRepo="https://github.com/Qezta/divit" />
 <Terminal />
