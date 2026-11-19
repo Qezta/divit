@@ -4,7 +4,6 @@ _: {
       push = {
         branches = ["main"];
         paths-ignore = [
-          "**/*.md"
           ".github/**"
           # Merging a sitemap update must not start another update.
           "static/sitemap.xml"
@@ -38,13 +37,10 @@ _: {
         }
         {
           name = "Generate the sitemap";
-          uses = "cicirello/generate-sitemap@6a56a20238e631d653600cf792c3596722b78259"; # v1.10.4
-          "with".base-url-path = "https://divit.qezta.com/";
-        }
-        {
-          # sitemap-path is an action output, not a configurable input.
-          name = "Place the sitemap in the static directory";
-          run = "mv sitemap.xml static/sitemap.xml";
+          run = ''
+            PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts -p 'test_*.py'
+            python3 scripts/generate_sitemap.py --base-url https://divit.qezta.com/
+          '';
         }
         {
           name = "Create or update sitemap pull request";

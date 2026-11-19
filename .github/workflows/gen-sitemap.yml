@@ -21,11 +21,9 @@ jobs:
         persist-credentials: false
         ref: main
     - name: Generate the sitemap
-      uses: cicirello/generate-sitemap@6a56a20238e631d653600cf792c3596722b78259
-      with:
-        base-url-path: https://divit.qezta.com/
-    - name: Place the sitemap in the static directory
-      run: mv sitemap.xml static/sitemap.xml
+      run: |-
+        PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts -p 'test_*.py'
+        python3 scripts/generate_sitemap.py --base-url https://divit.qezta.com/
     - name: Create or update sitemap pull request
       uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1
       with:
@@ -43,7 +41,6 @@ jobs:
     branches:
     - main
     paths-ignore:
-    - '**/*.md'
     - .github/**
     - static/sitemap.xml
   workflow_dispatch: {}
