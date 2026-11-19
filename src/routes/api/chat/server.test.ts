@@ -106,7 +106,7 @@ describe('chat generation', () => {
     );
     expect(mocks.generate).toHaveBeenCalledTimes(1);
     const options = mocks.generate.mock.calls[0][0];
-    expect(options.model).toBe('gemini-3.8-flash');
+    expect(options.model).toBe('gemini-3.1-flash-lite');
     expect(options.config.httpOptions).toEqual({ timeout: 20_000 });
     expect(options.config.abortSignal).toBeInstanceOf(AbortSignal);
     expect(options.config.systemInstruction).toContain('divit@qezta.com');
