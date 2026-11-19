@@ -3,45 +3,47 @@
 # (typically under flake.actions-nix.workflows.".github/workflows/gen-sitemap.yml") and run:
 #   nix run .#render-workflows
 # Or commit to trigger the pre-commit hook if enabled.
+concurrency:
+  cancel-in-progress: false
+  group: sitemap-update
 jobs:
   gen-sitemap:
+    if: github.ref == 'refs/heads/main'
     permissions:
       contents: write
-      id-token: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@main
+    - name: Checkout main
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       with:
-        fetch-depth: 1
+        fetch-depth: 0
+        persist-credentials: false
+        ref: main
     - name: Generate the sitemap
-      uses: cicirello/generate-sitemap@v1
+      uses: cicirello/generate-sitemap@6a56a20238e631d653600cf792c3596722b78259
       with:
         base-url-path: https://divit.qezta.com/
-        sitemap-path: static/sitemap.xml
-    - name: Commit and push sitemap
-      run: |-
-        if [[ `git status --porcelain static/sitemap.xml` ]]; then
-          git config --global user.name 'github-actions'
-          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add static/sitemap.xml
-          git commit -m "Automated sitemap update for ${{ github.ref_name }}" static/sitemap.xml
-          git push
-        else
-          echo "No changes to sitemap.xml"
-        fi
+    - name: Place the sitemap in the static directory
+      run: mv sitemap.xml static/sitemap.xml
+    - name: Create or update sitemap pull request
+      uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1
+      with:
+        add-paths: static/sitemap.xml
+        author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+        base: main
+        body: Update static/sitemap.xml using the sitemap generator.
+        branch: automation/update-sitemap
+        commit-message: 'chore(sitemap): update sitemap'
+        delete-branch: true
+        title: 'chore(sitemap): update sitemap'
     timeout-minutes: 30
 'on':
-  pull_request:
-    branches:
-    - main
-    paths-ignore:
-    - '**/*.md'
-    - .github/**
   push:
     branches:
     - main
     paths-ignore:
     - '**/*.md'
     - .github/**
+    - static/sitemap.xml
   workflow_dispatch: {}
