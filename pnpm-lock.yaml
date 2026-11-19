@@ -12,8 +12,8 @@ importers:
         specifier: ^1.0.0
         version: 1.52.0
       '@qezta/ui':
-        specifier: github:Qezta/ui#a1e55d937fef4116edae2e80afea355a757953fe
-        version: https://codeload.github.com/Qezta/ui/tar.gz/a1e55d937fef4116edae2e80afea355a757953fe(svelte@5.56.3(@typescript-eslint/types@8.59.3))(three@0.178.0)
+        specifier: github:Qezta/ui#6dade765b3384b7ba0c22d3a7045b0569903758f
+        version: https://codeload.github.com/Qezta/ui/tar.gz/6dade765b3384b7ba0c22d3a7045b0569903758f(svelte@5.56.3(@typescript-eslint/types@8.59.3))(three@0.178.0)
       '@vercel/analytics':
         specifier: ^1.5.0
         version: 1.6.1(@sveltejs/kit@2.63.1(@sveltejs/vite-plugin-svelte@7.1.2(svelte@5.56.3(@typescript-eslint/types@8.59.3))(vite@8.0.16(@types/node@24.13.1)(sass@1.99.0)))(svelte@5.56.3(@typescript-eslint/types@8.59.3))(typescript@5.9.3)(vite@8.0.16(@types/node@24.13.1)(sass@1.99.0)))(svelte@5.56.3(@typescript-eslint/types@8.59.3))
@@ -746,8 +746,8 @@ packages:
   '@protobufjs/utf8@1.1.1':
     resolution: {integrity: sha512-oOAWABowe8EAbMyWKM0tYDKi8Yaox52D+HWZhAIJqQXbqe0xI/GV7FhLWqlEKreMkfDjshR5FKgi3mnle0h6Eg==}
 
-  '@qezta/ui@https://codeload.github.com/Qezta/ui/tar.gz/a1e55d937fef4116edae2e80afea355a757953fe':
-    resolution: {tarball: https://codeload.github.com/Qezta/ui/tar.gz/a1e55d937fef4116edae2e80afea355a757953fe}
+  '@qezta/ui@https://codeload.github.com/Qezta/ui/tar.gz/6dade765b3384b7ba0c22d3a7045b0569903758f':
+    resolution: {tarball: https://codeload.github.com/Qezta/ui/tar.gz/6dade765b3384b7ba0c22d3a7045b0569903758f}
     version: 0.0.1
     peerDependencies:
       svelte: ^5.56.3
@@ -2699,7 +2699,7 @@ snapshots:
 
   '@protobufjs/utf8@1.1.1': {}
 
-  '@qezta/ui@https://codeload.github.com/Qezta/ui/tar.gz/a1e55d937fef4116edae2e80afea355a757953fe(svelte@5.56.3(@typescript-eslint/types@8.59.3))(three@0.178.0)':
+  '@qezta/ui@https://codeload.github.com/Qezta/ui/tar.gz/6dade765b3384b7ba0c22d3a7045b0569903758f(svelte@5.56.3(@typescript-eslint/types@8.59.3))(three@0.178.0)':
     dependencies:
       '@fortawesome/free-brands-svg-icons': 6.7.2
       '@fortawesome/free-solid-svg-icons': 6.7.2

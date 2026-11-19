@@ -160,7 +160,7 @@ Level: ███████████░░░ Expert`
     execute: () => ({
       output: `Contact Information:
 
-Email:        divitmittal@outlook.in
+Email:        divit@qezta.com
 GitHub:       github.com/DivitMittal
 LinkedIn:     linkedin.com/in/divit-mittal
 HuggingFace:  huggingface.co/divitmittal
