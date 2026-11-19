@@ -172,7 +172,7 @@ export const POST: RequestHandler = async ({ request }) => {
 				signal.throwIfAborted();
 				const response = await bounded(
 					ai.models.generateContentStream({
-						model: 'gemini-3.8-flash',
+						model: 'gemini-3.1-flash-lite',
 						config: {
 							systemInstruction: systemPrompt,
 							maxOutputTokens: 1024,
