@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@google/genai": "^1.0.0",
-    "@qezta/ui": "github:Qezta/ui#a1e55d937fef4116edae2e80afea355a757953fe",
+    "@qezta/ui": "github:Qezta/ui#6dade765b3384b7ba0c22d3a7045b0569903758f",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "sass": "^1.89.0",

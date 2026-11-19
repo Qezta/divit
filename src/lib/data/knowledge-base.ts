@@ -456,7 +456,7 @@ Divit strongly prefers statically typed languages and is skeptical of dynamic ty
 		title: 'Contact Information',
 		content: `How to reach Divit Mittal:
 
-Email: divitmittal@outlook.in
+Email: divit@qezta.com
 GitHub: github.com/DivitMittal
 LinkedIn: linkedin.com/in/divit-mittal
 HuggingFace: huggingface.co/divitmittal
@@ -532,7 +532,7 @@ Experience:
 
 Key Projects: HybridTransformer-MFIF, OS-nixCfg, CARLA-Autonomous-Driving, DocAssist-LLM, hs-faust, kanata-service
 
-If you're a recruiter or collaborator interested in Divit, the best next step is to reach out via email (divitmittal@outlook.in) or LinkedIn.`,
+If you're a recruiter or collaborator interested in Divit, the best next step is to reach out via email (divit@qezta.com) or LinkedIn.`,
 		keywords: [
 			'resume',
 			'cv',
