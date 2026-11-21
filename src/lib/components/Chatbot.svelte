@@ -262,7 +262,7 @@
     justify-content: center;
     gap: 10px;
     min-height: 44px;
-    width: 100px;
+    width: 112px;
     padding: 0 12px;
     border: 1px solid #777;
     border-radius: 0;
@@ -270,6 +270,7 @@
     color: #f5f5f5;
     font-size: 12px;
     cursor: pointer;
+    white-space: nowrap;
   }
   .chat-symbol {
     color: #ff477f;
@@ -483,7 +484,7 @@
     .chat-toggle {
       bottom: calc(12px + env(safe-area-inset-bottom));
       right: calc(12px + env(safe-area-inset-right));
-      width: 92px;
+      width: 104px;
       padding: 0 8px;
       gap: 8px;
     }

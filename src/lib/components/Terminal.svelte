@@ -262,7 +262,7 @@ about  background & experience`,
   .terminal-toggle {
     position: fixed;
     bottom: calc(20px + env(safe-area-inset-bottom));
-    right: calc(132px + env(safe-area-inset-right));
+    right: calc(144px + env(safe-area-inset-right));
     z-index: 1000;
     display: inline-flex;
     align-items: center;
@@ -406,7 +406,7 @@ about  background & experience`,
   @media (max-width: 600px) {
     .terminal-toggle {
       bottom: calc(12px + env(safe-area-inset-bottom));
-      right: calc(112px + env(safe-area-inset-right));
+      right: calc(124px + env(safe-area-inset-right));
       padding: 0 10px;
       gap: 8px;
     }
