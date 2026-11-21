@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { injectAnalytics } from '@vercel/analytics/sveltekit';
-  import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
-  import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
-  import '@qezta/ui/styles/global.scss';
-  import '@qezta/ui/styles/fonts.scss';
-  import Cursor from '@qezta/ui/components/atoms/Cursor.svelte';
-  import TouchCursor from '@qezta/ui/components/atoms/TouchCursor.svelte';
-  import Chatbot from '@qezta/ui/components/organisms/Chatbot.svelte';
-  import { burst } from '@qezta/ui/cursor';
+  import { injectAnalytics } from "@vercel/analytics/sveltekit";
+  import { injectSpeedInsights } from "@vercel/speed-insights/sveltekit";
+  import { onMount } from "svelte";
+  import { browser } from "$app/environment";
+  import "@qezta/ui/styles/global.scss";
+  import "@qezta/ui/styles/fonts.scss";
+  import Cursor from "@qezta/ui/components/atoms/Cursor.svelte";
+  import TouchCursor from "@qezta/ui/components/atoms/TouchCursor.svelte";
+  import Chatbot from "$lib/components/Chatbot.svelte";
+  import { burst } from "@qezta/ui/cursor";
 
   injectSpeedInsights();
   injectAnalytics();
@@ -23,8 +23,8 @@
     gainNode.gain.value = 1;
 
     const request = new XMLHttpRequest();
-    request.open('GET', 'sounds/click.mp3', true);
-    request.responseType = 'arraybuffer';
+    request.open("GET", "sounds/click.mp3", true);
+    request.responseType = "arraybuffer";
     request.onload = function () {
       audioCtx.decodeAudioData(request.response, (buffer) => {
         playClickSound = () => {
@@ -37,7 +37,7 @@
           // Adjust volume based on cursor burst.
           gainNode.gain.exponentialRampToValueAtTime(
             Math.max($burst, 0.2),
-            audioCtx.currentTime + 0.1
+            audioCtx.currentTime + 0.1,
           );
 
           source.connect(gainNode);
@@ -56,7 +56,10 @@
 
 <svelte:head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
   <meta name="og:title" content="Divit Mittal" />
   <meta property="og:description" content="My personal website" />
   <meta name="twitter:card" content="summary" />
@@ -64,7 +67,10 @@
   <title>Divit Mittal</title>
 </svelte:head>
 
-<svelte:window on:mousedown={playClickSound} on:contextmenu={(e) => e.preventDefault()} />
+<svelte:window
+  on:mousedown={playClickSound}
+  on:contextmenu={(e) => e.preventDefault()}
+/>
 
 <Cursor />
 <TouchCursor />
