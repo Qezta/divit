@@ -98,7 +98,16 @@
           -(event.clientY - height / 2) / height,
         );
       }
+      function release() {
+        if (!coarse) return;
+        // Keep the fading trail, but stop painting once the finger lifts.
+        target.set(-10, -10);
+        uniforms.u_mouse.value.copy(target);
+      }
       const options = { passive: true, signal: listeners.signal };
+      document.addEventListener("pointerup", release, options);
+      document.addEventListener("touchend", release, options);
+      document.addEventListener("touchcancel", release, options);
       document.addEventListener("pointerdown", point, options);
       document.addEventListener("pointermove", point, options);
       // Browsers cancel pointer events when native scrolling takes over.
