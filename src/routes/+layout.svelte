@@ -7,7 +7,7 @@
   import '@qezta/ui/styles/fonts.scss';
   import Cursor from '@qezta/ui/components/atoms/Cursor.svelte';
   import TouchCursor from '@qezta/ui/components/atoms/TouchCursor.svelte';
-  import Chatbot from '@qezta/ui/components/organisms/Chatbot.svelte';
+  import Chatbot from '$lib/components/Chatbot.svelte';
   import { burst } from '@qezta/ui/cursor';
 
   injectSpeedInsights();
@@ -56,7 +56,7 @@
 
 <svelte:head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="og:title" content="Divit Mittal" />
   <meta property="og:description" content="My personal website" />
   <meta name="twitter:card" content="summary" />

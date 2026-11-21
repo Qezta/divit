@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { executeCommand, type CommandResponse } from '$lib/data/terminal-commands';
 
   interface HistoryEntry {
@@ -15,18 +15,18 @@
   let terminalElement: HTMLDivElement;
   let inputElement: HTMLInputElement;
   let isVisible = false;
+  let toggleElement: HTMLButtonElement;
+  let panelElement: HTMLDivElement;
 
   onMount(() => {
     // Show welcome message
     history = [
       {
         input: '',
-        output: `Welcome to Divit's Terminal!
+        output: `divit / portfolio
 
-Type 'help' to see available commands.
-Type 'about' to learn more about me.
-
-This is an interactive CLI experience - explore away!`,
+help   available commands
+about  background & experience`,
         isError: false
       }
     ];
@@ -101,71 +101,100 @@ This is an interactive CLI experience - explore away!`,
         input = '';
       }
     }
-
-    // Tab - autocomplete (basic)
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      // Could add autocomplete logic here
-    }
   }
 
   function focusInput() {
     inputElement?.focus();
   }
 
-  function toggleTerminal() {
+  async function toggleTerminal() {
     isVisible = !isVisible;
     if (isVisible) {
-      setTimeout(() => focusInput(), 100);
+      window.dispatchEvent(new CustomEvent('portfolio-panel', { detail: 'terminal' }));
+      await tick();
+      // Avoid raising a software keyboard until a touch user selects the input.
+      if (window.matchMedia('(pointer: fine)').matches) focusInput();
+      else panelElement?.focus();
+    } else {
+      toggleElement?.focus();
     }
   }
 
-  function linkifyUrls(text: string): string {
-    // First, linkify email addresses
-    const emailRegex = /\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b/g;
-    let result = text.replace(emailRegex, (match) => {
-      return `<a href="mailto:${match}" class="terminal-link">${match}</a>`;
-    });
+  function handleWindowKeydown(event: KeyboardEvent) {
+    if (isVisible && event.key === 'Escape') {
+      event.preventDefault();
+      toggleTerminal();
+    }
+  }
 
-    // Then, match URLs (with or without protocol)
-    const urlRegex = /(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+\.(?:[a-zA-Z]{2,}))(?:\/[^\s]*)?/g;
-    result = result.replace(urlRegex, (match) => {
-      // Skip if already linkified (contains HTML tags)
-      if (match.includes('<a')) return match;
+  onMount(() => {
+    const closeOtherPanel = (event: Event) => {
+      if ((event as CustomEvent<string>).detail !== 'terminal') isVisible = false;
+    };
+    window.addEventListener('portfolio-panel', closeOtherPanel);
+    return () => window.removeEventListener('portfolio-panel', closeOtherPanel);
+  });
 
-      // Add https:// if no protocol
-      const href = match.startsWith('http') ? match : `https://${match}`;
-      return `<a href="${href}" target="_blank" rel="noopener noreferrer" class="terminal-link">${match}</a>`;
-    });
-
-    return result;
+  function linkifyUrls(text: string): { text: string; href?: string }[] {
+    const pattern =
+      /https?:\/\/[^\s<>"']+|\b[\w.+%-]+@[\w.-]+\.[a-z]{2,}\b|\b(?:www\.)?[a-z0-9-]+\.[a-z]{2,}(?:\/[^\s<>"']*)?/gi;
+    const segments: { text: string; href?: string }[] = [];
+    let index = 0;
+    for (const match of text.matchAll(pattern)) {
+      const start = match.index ?? 0;
+      if (start > index) segments.push({ text: text.slice(index, start) });
+      const value = match[0];
+      const href =
+        value.includes('@') && !/^https?:\/\//i.test(value)
+          ? `mailto:${value}`
+          : /^https?:\/\//i.test(value)
+            ? value
+            : `https://${value}`;
+      segments.push({ text: value, href });
+      index = start + value.length;
+    }
+    if (index < text.length) segments.push({ text: text.slice(index) });
+    return segments;
   }
 </script>
 
+<svelte:window on:keydown={handleWindowKeydown} />
+
 <!-- Terminal Toggle Button -->
-<button class="terminal-toggle" on:click={toggleTerminal} aria-label="Toggle Terminal">
-  <span class="terminal-icon">{isVisible ? '✕' : '▶_'}</span>
-  <span class="terminal-label">Terminal</span>
+<button
+  class="terminal-toggle"
+  class:open={isVisible}
+  bind:this={toggleElement}
+  on:click={toggleTerminal}
+  aria-label={isVisible ? 'Close terminal' : 'Open terminal'}
+  aria-expanded={isVisible}
+  aria-controls="portfolio-terminal"
+>
+  <span class="terminal-icon">&gt;_</span>
+  <span class="terminal-label">terminal</span>
 </button>
 
 <!-- Terminal Window -->
 {#if isVisible}
-  <div class="terminal-container">
+  <div
+    class="terminal-container"
+    id="portfolio-terminal"
+    role="dialog"
+    aria-labelledby="terminal-title"
+    tabindex="-1"
+    bind:this={panelElement}
+  >
     <div class="terminal-header">
-      <div class="terminal-title">divit@terminal:~$</div>
+      <div class="terminal-title" id="terminal-title">
+        terminal <span>/ divit</span>
+      </div>
       <button class="terminal-close" on:click={toggleTerminal} aria-label="Close Terminal">
         ✕
       </button>
     </div>
 
-    <div
-      class="terminal-content"
-      bind:this={terminalElement}
-      on:click={focusInput}
-      role="log"
-      aria-live="polite"
-    >
-      {#each history as entry}
+    <div class="terminal-content" bind:this={terminalElement} role="log" aria-live="polite">
+      {#each history as entry, index (index)}
         {#if entry.input}
           <div class="terminal-prompt">
             <span class="prompt-symbol">$</span>
@@ -173,7 +202,17 @@ This is an interactive CLI experience - explore away!`,
           </div>
         {/if}
         {#if entry.output}
-          <pre class="terminal-output" class:error={entry.isError}>{@html linkifyUrls(entry.output)}</pre>
+          <!-- Links are restricted to external HTTP(S) and mailto URLs by linkifyUrls. -->
+          <!-- eslint-disable svelte/no-navigation-without-resolve -->
+          <pre
+            class="terminal-output"
+            class:error={entry.isError}>{#each linkifyUrls(entry.output) as segment, index (index)}{#if segment.href}<a
+                  class="terminal-link"
+                  href={segment.href}
+                  target="_blank"
+                  rel="noopener noreferrer">{segment.text}</a
+                >{:else}{segment.text}{/if}{/each}</pre>
+          <!-- eslint-enable svelte/no-navigation-without-resolve -->
         {/if}
       {/each}
 
@@ -197,254 +236,168 @@ This is an interactive CLI experience - explore away!`,
 {/if}
 
 <style lang="scss">
+  .terminal-toggle,
+  .terminal-container,
+  .terminal-container :global(*) {
+    box-sizing: border-box;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  }
+
   .terminal-toggle {
     position: fixed;
-    // Sit to the left of @qezta/ui's Chatbot launcher (52px circle at
-    // bottom/right 28px) instead of underneath it.
-    bottom: 32px;
-    right: calc(28px + 52px + 12px);
-    z-index: 999;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    right: calc(132px + env(safe-area-inset-right));
+    z-index: 1000;
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    transition: all 0.3s ease;
+    justify-content: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid #777;
+    border-radius: 0;
+    background: #090909;
+    color: #f5f5f5;
+    font-size: 12px;
+    cursor: pointer;
+  }
 
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-    }
+  .terminal-icon {
+    color: #ff477f;
+  }
+  .terminal-label {
+    color: inherit;
+  }
+  .terminal-toggle:hover,
+  .terminal-toggle.open {
+    border-color: #f5f5f5;
+    background: #222;
+  }
 
-    &:active {
-      transform: translateY(0);
-    }
-
-    .terminal-icon {
-      font-size: 1.1rem;
-    }
-
-    .terminal-label {
-      @media (max-width: 505px) {
-        display: none;
-      }
-    }
+  button:focus-visible,
+  .terminal-input:focus-visible {
+    outline: 2px solid #ff477f;
+    outline-offset: 3px;
   }
 
   .terminal-container {
     position: fixed;
-    bottom: 5.5rem;
-    right: 2rem;
-    width: 650px;
-    max-width: calc(100vw - 4rem);
-    height: 500px;
-    max-height: calc(100vh - 8rem);
-    max-height: calc(100dvh - 8rem);
-    background: #1a1a1a;
-    border: 2px solid #444;
-    border-radius: 8px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+    bottom: calc(76px + env(safe-area-inset-bottom));
+    right: calc(20px + env(safe-area-inset-right));
+    z-index: 999;
     display: flex;
     flex-direction: column;
-    z-index: 998;
-    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-    animation: slideUp 0.3s ease;
-
-    @media (max-width: 768px) {
-      width: calc(100vw - 2rem);
-      right: 1rem;
-      bottom: 5rem;
-      height: 450px;
-      max-height: calc(100vh - 6rem);
-      max-height: calc(100dvh - 6rem);
-    }
-
-    @media (max-width: 505px) {
-      width: calc(100vw - 1rem);
-      right: 0.5rem;
-      bottom: 4.5rem;
-      height: 400px;
-      max-height: calc(100vh - 5.5rem);
-      max-height: calc(100dvh - 5.5rem);
-      border-radius: 4px;
-    }
-  }
-
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    width: 640px;
+    max-width: calc(100vw - 40px - env(safe-area-inset-left) - env(safe-area-inset-right));
+    height: 480px;
+    max-height: calc(100dvh - 96px - env(safe-area-inset-bottom) - env(safe-area-inset-top));
+    border: 1px solid #777;
+    border-radius: 0;
+    background: #090909;
+    color: #eee;
   }
 
   .terminal-header {
     display: flex;
-    justify-content: space-between;
+    flex-shrink: 0;
     align-items: center;
-    padding: 0.85rem 1.25rem;
-    background: #0d0d0d;
+    justify-content: space-between;
+    min-height: 52px;
+    padding-left: 16px;
     border-bottom: 1px solid #444;
-    border-radius: 6px 6px 0 0;
   }
 
   .terminal-title {
-    color: #00ff00;
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
+    color: #f5f5f5;
+    font-size: 12px;
   }
-
+  .terminal-title span {
+    color: #a3a3a3;
+  }
   .terminal-close {
-    background: none;
-    border: none;
-    color: #888;
-    font-size: 1.2rem;
+    min-width: 48px;
+    min-height: 48px;
+    border: 0;
+    background: transparent;
+    color: #eee;
+    font-size: 18px;
     cursor: pointer;
-    padding: 0;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: #ff0052;
-    }
   }
-
+  .terminal-close:hover {
+    background: #222;
+  }
   .terminal-content {
     flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 1.25rem;
-    color: #f0f0f0;
-    font-size: 0.9rem;
-    line-height: 1.6;
-
-    &::-webkit-scrollbar {
-      width: 10px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: #0d0d0d;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: #444;
-      border-radius: 5px;
-
-      &:hover {
-        background: #555;
-      }
-    }
+    min-height: 0;
+    padding: 20px;
+    overflow: auto;
+    overscroll-behavior: contain;
+    font-size: 13px;
+    line-height: 1.65;
   }
-
+  .terminal-content :global(*) {
+    user-select: text;
+  }
   .terminal-prompt {
     display: flex;
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-    align-items: flex-start;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
   }
-
   .prompt-symbol {
-    color: #00ff00;
-    user-select: none;
-    font-weight: 600;
     flex-shrink: 0;
+    color: #ff477f;
   }
-
   .prompt-input {
     color: #fff;
-    font-weight: 500;
+    overflow-wrap: anywhere;
   }
-
   .terminal-input {
     flex: 1;
-    background: none;
-    border: none;
+    min-width: 0;
+    min-height: 44px;
+    padding: 6px 4px;
+    border: 0;
+    background: transparent;
     color: #fff;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: 500;
-    outline: none;
-    caret-color: #00ff00;
-
-    &::selection {
-      background: #667eea;
-    }
+    font-size: 16px;
+    caret-color: #ff477f;
   }
-
   .terminal-output {
-    margin: 0 0 1.25rem 0;
-    padding-left: 2rem;
+    margin: 0 0 20px;
     white-space: pre-wrap;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    color: #f5f5f5;
-    font-family: inherit;
+    overflow-wrap: anywhere;
+    color: #ddd;
     font-size: inherit;
-    line-height: 1.6;
-
-    &.error {
-      color: #ff6b6b;
-      font-weight: 500;
-    }
-
-    :global(.terminal-link) {
-      color: #667eea;
-      text-decoration: underline;
-      cursor: pointer;
-      transition: color 0.2s ease;
-
-      &:hover {
-        color: #764ba2;
-        text-decoration: underline;
-      }
-    }
+    line-height: inherit;
+  }
+  .terminal-output.error {
+    color: #ff829e;
+  }
+  .terminal-output :global(.terminal-link) {
+    color: #ff829e;
+    text-decoration: underline;
+  }
+  .terminal-output :global(.terminal-link:focus-visible) {
+    outline: 2px solid #ff477f;
+    outline-offset: 3px;
   }
 
-  @media (max-width: 768px) {
-    .terminal-content {
-      font-size: 0.85rem;
-      padding: 1rem;
-    }
-
-    .terminal-output {
-      padding-left: 1.5rem;
-    }
-  }
-
-  @media (max-width: 505px) {
+  @media (max-width: 600px) {
     .terminal-toggle {
-      padding: 0.6rem 1.2rem;
-      font-size: 0.85rem;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      right: calc(112px + env(safe-area-inset-right));
+      padding: 0 10px;
+      gap: 8px;
     }
-
+    .terminal-container {
+      right: calc(12px + env(safe-area-inset-right));
+      bottom: calc(68px + env(safe-area-inset-bottom));
+      max-width: calc(100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right));
+      max-height: calc(100dvh - 80px - env(safe-area-inset-bottom) - env(safe-area-inset-top));
+    }
     .terminal-content {
-      padding: 1rem;
-      font-size: 0.85rem;
-      line-height: 1.5;
-    }
-
-    .terminal-output {
-      padding-left: 1.25rem;
-      margin-bottom: 1rem;
-    }
-
-    .terminal-prompt {
-      margin-bottom: 0.6rem;
+      padding: 16px;
     }
   }
 </style>
