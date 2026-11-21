@@ -1,6 +1,9 @@
 <script lang="ts">
-  import { onMount, tick } from 'svelte';
-  import { executeCommand, type CommandResponse } from '$lib/data/terminal-commands';
+  import { onMount, tick } from "svelte";
+  import {
+    executeCommand,
+    type CommandResponse,
+  } from "$lib/data/terminal-commands";
 
   interface HistoryEntry {
     input: string;
@@ -8,7 +11,7 @@
     isError: boolean;
   }
 
-  let input = '';
+  let input = "";
   let history: HistoryEntry[] = [];
   let commandHistory: string[] = [];
   let historyIndex = -1;
@@ -22,13 +25,13 @@
     // Show welcome message
     history = [
       {
-        input: '',
+        input: "",
         output: `divit / portfolio
 
 help   available commands
 about  background & experience`,
-        isError: false
-      }
+        isError: false,
+      },
     ];
   });
 
@@ -41,17 +44,17 @@ about  background & experience`,
     const result: CommandResponse = executeCommand(trimmedInput);
 
     // Special handling for clear command
-    if (result.output === '__CLEAR__') {
+    if (result.output === "__CLEAR__") {
       history = [];
-      input = '';
+      input = "";
       return;
     }
 
     // Special handling for resume command - open Europass CV in new tab
-    if (trimmedInput === 'resume') {
+    if (trimmedInput === "resume") {
       window.open(
-        'https://europa.eu/europass/eportfolio/screen/share/33683761-9b95-4b23-8184-fa65f7a14e06?lang=en',
-        '_blank'
+        "https://europa.eu/europass/eportfolio/screen/share/33683761-9b95-4b23-8184-fa65f7a14e06?lang=en",
+        "_blank",
       );
     }
 
@@ -61,8 +64,8 @@ about  background & experience`,
       {
         input: trimmedInput,
         output: result.output,
-        isError: result.isError || false
-      }
+        isError: result.isError || false,
+      },
     ];
 
     // Add to command history
@@ -70,7 +73,7 @@ about  background & experience`,
     historyIndex = commandHistory.length;
 
     // Clear input
-    input = '';
+    input = "";
 
     // Scroll to bottom
     setTimeout(() => {
@@ -82,7 +85,7 @@ about  background & experience`,
 
   function handleKeyDown(e: KeyboardEvent) {
     // Arrow up - previous command
-    if (e.key === 'ArrowUp') {
+    if (e.key === "ArrowUp") {
       e.preventDefault();
       if (historyIndex > 0) {
         historyIndex--;
@@ -91,14 +94,14 @@ about  background & experience`,
     }
 
     // Arrow down - next command
-    if (e.key === 'ArrowDown') {
+    if (e.key === "ArrowDown") {
       e.preventDefault();
       if (historyIndex < commandHistory.length - 1) {
         historyIndex++;
         input = commandHistory[historyIndex];
       } else {
         historyIndex = commandHistory.length;
-        input = '';
+        input = "";
       }
     }
   }
@@ -110,10 +113,12 @@ about  background & experience`,
   async function toggleTerminal() {
     isVisible = !isVisible;
     if (isVisible) {
-      window.dispatchEvent(new CustomEvent('portfolio-panel', { detail: 'terminal' }));
+      window.dispatchEvent(
+        new CustomEvent("portfolio-panel", { detail: "terminal" }),
+      );
       await tick();
       // Avoid raising a software keyboard until a touch user selects the input.
-      if (window.matchMedia('(pointer: fine)').matches) focusInput();
+      if (window.matchMedia("(pointer: fine)").matches) focusInput();
       else panelElement?.focus();
     } else {
       toggleElement?.focus();
@@ -121,7 +126,7 @@ about  background & experience`,
   }
 
   function handleWindowKeydown(event: KeyboardEvent) {
-    if (isVisible && event.key === 'Escape') {
+    if (isVisible && event.key === "Escape") {
       event.preventDefault();
       toggleTerminal();
     }
@@ -129,10 +134,11 @@ about  background & experience`,
 
   onMount(() => {
     const closeOtherPanel = (event: Event) => {
-      if ((event as CustomEvent<string>).detail !== 'terminal') isVisible = false;
+      if ((event as CustomEvent<string>).detail !== "terminal")
+        isVisible = false;
     };
-    window.addEventListener('portfolio-panel', closeOtherPanel);
-    return () => window.removeEventListener('portfolio-panel', closeOtherPanel);
+    window.addEventListener("portfolio-panel", closeOtherPanel);
+    return () => window.removeEventListener("portfolio-panel", closeOtherPanel);
   });
 
   function linkifyUrls(text: string): { text: string; href?: string }[] {
@@ -145,7 +151,7 @@ about  background & experience`,
       if (start > index) segments.push({ text: text.slice(index, start) });
       const value = match[0];
       const href =
-        value.includes('@') && !/^https?:\/\//i.test(value)
+        value.includes("@") && !/^https?:\/\//i.test(value)
           ? `mailto:${value}`
           : /^https?:\/\//i.test(value)
             ? value
@@ -166,7 +172,7 @@ about  background & experience`,
   class:open={isVisible}
   bind:this={toggleElement}
   on:click={toggleTerminal}
-  aria-label={isVisible ? 'Close terminal' : 'Open terminal'}
+  aria-label={isVisible ? "Close terminal" : "Open terminal"}
   aria-expanded={isVisible}
   aria-controls="portfolio-terminal"
 >
@@ -188,12 +194,21 @@ about  background & experience`,
       <div class="terminal-title" id="terminal-title">
         terminal <span>/ divit</span>
       </div>
-      <button class="terminal-close" on:click={toggleTerminal} aria-label="Close Terminal">
+      <button
+        class="terminal-close"
+        on:click={toggleTerminal}
+        aria-label="Close Terminal"
+      >
         ✕
       </button>
     </div>
 
-    <div class="terminal-content" bind:this={terminalElement} role="log" aria-live="polite">
+    <div
+      class="terminal-content"
+      bind:this={terminalElement}
+      role="log"
+      aria-live="polite"
+    >
       {#each history as entry, index (index)}
         {#if entry.input}
           <div class="terminal-prompt">
@@ -223,7 +238,7 @@ about  background & experience`,
           bind:this={inputElement}
           bind:value={input}
           on:keydown={handleKeyDown}
-          on:keydown={(e) => e.key === 'Enter' && handleSubmit()}
+          on:keydown={(e) => e.key === "Enter" && handleSubmit()}
           class="terminal-input"
           type="text"
           spellcheck="false"
@@ -240,7 +255,7 @@ about  background & experience`,
   .terminal-container,
   .terminal-container :global(*) {
     box-sizing: border-box;
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   }
 
   .terminal-toggle {
@@ -288,9 +303,13 @@ about  background & experience`,
     display: flex;
     flex-direction: column;
     width: 640px;
-    max-width: calc(100vw - 40px - env(safe-area-inset-left) - env(safe-area-inset-right));
+    max-width: calc(
+      100vw - 40px - env(safe-area-inset-left) - env(safe-area-inset-right)
+    );
     height: 480px;
-    max-height: calc(100dvh - 96px - env(safe-area-inset-bottom) - env(safe-area-inset-top));
+    max-height: calc(
+      100dvh - 96px - env(safe-area-inset-bottom) - env(safe-area-inset-top)
+    );
     border: 1px solid #777;
     border-radius: 0;
     background: #090909;
@@ -393,8 +412,12 @@ about  background & experience`,
     .terminal-container {
       right: calc(12px + env(safe-area-inset-right));
       bottom: calc(68px + env(safe-area-inset-bottom));
-      max-width: calc(100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right));
-      max-height: calc(100dvh - 80px - env(safe-area-inset-bottom) - env(safe-area-inset-top));
+      max-width: calc(
+        100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right)
+      );
+      max-height: calc(
+        100dvh - 80px - env(safe-area-inset-bottom) - env(safe-area-inset-top)
+      );
     }
     .terminal-content {
       padding: 16px;

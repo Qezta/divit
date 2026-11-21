@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { onMount, tick } from 'svelte';
+  import { onMount, tick } from "svelte";
 
   interface Message {
-    role: 'user' | 'assistant';
+    role: "user" | "assistant";
     content: string;
     streaming?: boolean;
   }
 
-  const suggestions = ['Projects', 'Experience', 'Skills', 'Contact'];
+  const suggestions = ["Projects", "Experience", "Skills", "Contact"];
   let isOpen = false;
   let messages: Message[] = [];
-  let inputValue = '';
+  let inputValue = "";
   let isLoading = false;
   let hasError = false;
   let messagesElement: HTMLDivElement;
@@ -21,10 +21,12 @@
   async function toggleOpen() {
     isOpen = !isOpen;
     if (isOpen) {
-      window.dispatchEvent(new CustomEvent('portfolio-panel', { detail: 'chat' }));
+      window.dispatchEvent(
+        new CustomEvent("portfolio-panel", { detail: "chat" }),
+      );
       await tick();
       // Touch users can read the panel before choosing to raise the keyboard.
-      if (window.matchMedia('(pointer: fine)').matches) inputElement?.focus();
+      if (window.matchMedia("(pointer: fine)").matches) inputElement?.focus();
       else panelElement?.focus();
     } else {
       toggleElement?.focus();
@@ -33,14 +35,14 @@
 
   onMount(() => {
     const closeOtherPanel = (event: Event) => {
-      if ((event as CustomEvent<string>).detail !== 'chat') isOpen = false;
+      if ((event as CustomEvent<string>).detail !== "chat") isOpen = false;
     };
-    window.addEventListener('portfolio-panel', closeOtherPanel);
-    return () => window.removeEventListener('portfolio-panel', closeOtherPanel);
+    window.addEventListener("portfolio-panel", closeOtherPanel);
+    return () => window.removeEventListener("portfolio-panel", closeOtherPanel);
   });
 
   function handleWindowKeydown(event: KeyboardEvent) {
-    if (isOpen && event.key === 'Escape') {
+    if (isOpen && event.key === "Escape") {
       event.preventDefault();
       toggleOpen();
     }
@@ -48,48 +50,54 @@
 
   async function scrollToBottom() {
     await tick();
-    if (messagesElement) messagesElement.scrollTop = messagesElement.scrollHeight;
+    if (messagesElement)
+      messagesElement.scrollTop = messagesElement.scrollHeight;
   }
 
   async function sendMessage(content: string) {
     const text = content.trim();
     if (!text || isLoading) return;
     hasError = false;
-    inputValue = '';
-    messages = [...messages, { role: 'user', content: text }];
+    inputValue = "";
+    messages = [...messages, { role: "user", content: text }];
     isLoading = true;
-    messages = [...messages, { role: 'assistant', content: '', streaming: true }];
+    messages = [
+      ...messages,
+      { role: "assistant", content: "", streaming: true },
+    ];
     await scrollToBottom();
 
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: messages.slice(0, -1).map(({ role, content }) => ({ role, content }))
-        })
+          messages: messages
+            .slice(0, -1)
+            .map(({ role, content }) => ({ role, content })),
+        }),
       });
-      if (!response.ok || !response.body) throw new Error('Chat unavailable');
+      if (!response.ok || !response.body) throw new Error("Chat unavailable");
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      let buffer = '';
+      let buffer = "";
       let complete = false;
       try {
         while (!complete) {
           const { done, value } = await reader.read();
           buffer += decoder.decode(value, { stream: !done });
-          const lines = buffer.split('\n');
-          buffer = done ? '' : (lines.pop() ?? '');
+          const lines = buffer.split("\n");
+          buffer = done ? "" : (lines.pop() ?? "");
           for (const line of lines) {
-            if (!line.startsWith('data: ')) continue;
+            if (!line.startsWith("data: ")) continue;
             const data = line.slice(6).trim();
-            if (data === '[DONE]') {
+            if (data === "[DONE]") {
               complete = true;
               break;
             }
             const parsed = JSON.parse(data);
-            if (parsed.error) throw new Error('Chat unavailable');
-            if (typeof parsed.text === 'string') {
+            if (parsed.error) throw new Error("Chat unavailable");
+            if (typeof parsed.text === "string") {
               messages[messages.length - 1].content += parsed.text;
               messages = messages;
               await scrollToBottom();
@@ -101,10 +109,12 @@
         await reader.cancel();
         reader.releaseLock();
       }
-      if (!messages[messages.length - 1].content) throw new Error('Empty response');
+      if (!messages[messages.length - 1].content)
+        throw new Error("Empty response");
     } catch {
       hasError = true;
-      messages[messages.length - 1].content = 'Chat unavailable. Try again in a moment.';
+      messages[messages.length - 1].content =
+        "Chat unavailable. Try again in a moment.";
       messages = messages;
     } finally {
       messages[messages.length - 1].streaming = false;
@@ -115,7 +125,7 @@
   }
 
   function handleInputKeydown(event: KeyboardEvent) {
-    if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
+    if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
       event.preventDefault();
       sendMessage(inputValue);
     }
@@ -129,7 +139,7 @@
   class:open={isOpen}
   bind:this={toggleElement}
   on:click={toggleOpen}
-  aria-label={isOpen ? 'Close chat' : 'Open chat about Divit'}
+  aria-label={isOpen ? "Close chat" : "Open chat about Divit"}
   aria-expanded={isOpen}
   aria-controls="portfolio-chat"
 >
@@ -148,7 +158,9 @@
   >
     <div class="chat-header">
       <h2 id="chat-title">ask divit <span>/ AI assistant</span></h2>
-      <button class="close-button" on:click={toggleOpen} aria-label="Close chat">✕</button>
+      <button class="close-button" on:click={toggleOpen} aria-label="Close chat"
+        >✕</button
+      >
     </div>
 
     <div
@@ -166,7 +178,10 @@
           <div class="suggestions">
             {#each suggestions as suggestion (suggestion)}
               <button
-                on:click={() => sendMessage(`Tell me about Divit's ${suggestion.toLowerCase()}.`)}
+                on:click={() =>
+                  sendMessage(
+                    `Tell me about Divit's ${suggestion.toLowerCase()}.`,
+                  )}
               >
                 <span>{suggestion}</span><span aria-hidden="true">↗</span>
               </button>
@@ -175,9 +190,9 @@
         </div>
       {:else}
         {#each messages as message, i (i)}
-          <div class="message" class:user={message.role === 'user'}>
+          <div class="message" class:user={message.role === "user"}>
             <div class="message-label">
-              {message.role === 'user' ? 'you' : 'assistant'}
+              {message.role === "user" ? "you" : "assistant"}
             </div>
             <div class="message-content">
               {#if message.streaming && !message.content}
@@ -204,7 +219,10 @@
       </div>
     {/if}
 
-    <form class="input-area" on:submit|preventDefault={() => sendMessage(inputValue)}>
+    <form
+      class="input-area"
+      on:submit|preventDefault={() => sendMessage(inputValue)}
+    >
       <textarea
         bind:this={inputElement}
         bind:value={inputValue}
@@ -231,7 +249,7 @@
   .chat-panel,
   .chat-panel :global(*) {
     box-sizing: border-box;
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   }
   .chat-toggle {
     position: fixed;
@@ -280,9 +298,13 @@
     display: flex;
     flex-direction: column;
     width: 400px;
-    max-width: calc(100vw - 40px - env(safe-area-inset-left) - env(safe-area-inset-right));
+    max-width: calc(
+      100vw - 40px - env(safe-area-inset-left) - env(safe-area-inset-right)
+    );
     height: 520px;
-    max-height: calc(100dvh - 96px - env(safe-area-inset-bottom) - env(safe-area-inset-top));
+    max-height: calc(
+      100dvh - 96px - env(safe-area-inset-bottom) - env(safe-area-inset-top)
+    );
     border: 1px solid #777;
     border-radius: 0;
     background: #090909;
@@ -467,8 +489,12 @@
     .chat-panel {
       right: calc(12px + env(safe-area-inset-right));
       bottom: calc(68px + env(safe-area-inset-bottom));
-      max-width: calc(100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right));
-      max-height: calc(100dvh - 80px - env(safe-area-inset-bottom) - env(safe-area-inset-top));
+      max-width: calc(
+        100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right)
+      );
+      max-height: calc(
+        100dvh - 80px - env(safe-area-inset-bottom) - env(safe-area-inset-top)
+      );
     }
   }
 </style>
