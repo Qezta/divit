@@ -19,18 +19,19 @@
     max-width: 100%;
   }
 
-  @media (max-width: 768px) {
-    /* Keep the tactile background when WebGL or motion is unavailable. */
-    :global(body::after) {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      opacity: 0.055;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23fff' filter='url(%23n)' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
-    }
+  /* This tile is a captured frame of cursor_trail_fragment.glsl's grain,
+     used only when a WebGL context cannot be created. */
+  :global(body.portfolio-static::before) {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: #000 url("/shader-grain.png") repeat;
+    background-size: 256px 256px;
+  }
 
+  @media (max-width: 768px) {
     :global(body) {
       background-color: var(--bg-color);
       padding: max(1rem, env(safe-area-inset-top))
