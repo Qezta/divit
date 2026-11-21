@@ -4,6 +4,9 @@ uniform float u_time;
 uniform sampler2D u_noise;
 uniform sampler2D u_buffer;
 uniform bool u_renderpass;
+uniform bool u_touch;
+uniform bool u_paint;
+uniform bool u_static;
 
 const float blurMultiplier = 0.95;
 const float circleSize = .25;
@@ -67,9 +70,9 @@ void main() {
 	if (u_renderpass) {
 		tex = vec4(blur(u_buffer, sample, ps * blurStrength) * blurMultiplier, 1.);
 		float df = length(mouse - uv);
-		fragcolour = vec3(smoothstep(circleSize, 0., df));
+		fragcolour = u_paint ? vec3(smoothstep(circleSize, 0., df)) : vec3(0.);
 	} else {
-		tex = texture2D(u_buffer, sample, 2.) * .98;
+		tex = u_static ? vec4(0.) : texture2D(u_buffer, sample, 2.) * .98;
 		tex = vec4(
 			smoothstep(0.0, threshold - fwidth(tex.x), tex.x),
 			smoothstep(0.2, threshold - fwidth(tex.y) + .2, tex.y),
@@ -77,7 +80,7 @@ void main() {
 			1.0
 		);
 		vec3 n = hash33(vec3(uv, u_time * .1));
-		fragcolour = vec3(smoothstep(circleSize, 0., length(uv)));
+		fragcolour = (u_touch || u_static) ? vec3(0.) : vec3(smoothstep(circleSize, 0., length(uv)));
 		tex.rgb += n * .2 - .1;
 		tex.rgb = vec3(dot(tex.rgb, vec3(0.299, 0.587, 0.114)));
 	}
