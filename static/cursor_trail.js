@@ -97,6 +97,9 @@
           (event.clientX - width / 2) / height,
           -(event.clientY - height / 2) / height,
         );
+        if (coarse && uniforms.u_mouse.value.x === -10) {
+          uniforms.u_mouse.value.copy(target);
+        }
       }
       function release() {
         if (!coarse) return;
