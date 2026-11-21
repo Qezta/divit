@@ -246,6 +246,7 @@
 
 <style lang="scss">
   .chat-toggle,
+  .chat-toggle :global(*),
   .chat-panel,
   .chat-panel :global(*) {
     box-sizing: border-box;

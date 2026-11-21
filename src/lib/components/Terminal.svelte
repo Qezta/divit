@@ -252,6 +252,7 @@ about  background & experience`,
 
 <style lang="scss">
   .terminal-toggle,
+  .terminal-toggle :global(*),
   .terminal-container,
   .terminal-container :global(*) {
     box-sizing: border-box;
