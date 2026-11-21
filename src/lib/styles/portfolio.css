@@ -1,0 +1,147 @@
+/* Keep this site's surfaces aligned with its terminal and assistant controls. */
+:root body #card {
+  border: 1px solid #444;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#card .badge,
+#card .terminal-hint code,
+#card .category-count,
+#card .repo-lang {
+  border: 1px solid #444;
+  border-radius: 0;
+  background: #171717;
+  color: #ccc;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-weight: 400;
+}
+
+#card .stat-card,
+#card .category-button,
+#card .category-repos,
+#card .repo-item,
+#card .error-message {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#card .stat-card,
+#card .category-button {
+  border-color: #444;
+  background: #101010;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+#card .stat-card:hover,
+#card .category-button:hover,
+#card .category-button.expanded {
+  border-color: #888;
+  background: #1b1b1b;
+  transform: none;
+}
+
+#card .stat-value {
+  background: none;
+  color: #f5f5f5;
+  -webkit-text-fill-color: currentColor;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+#card .stat-label,
+#card .last-updated,
+#card .category-arrow {
+  color: #aaa;
+}
+
+#card .category-button {
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+#card .category-icon {
+  color: #ff477f;
+}
+
+#card .category-repos {
+  border-color: #444;
+  background: #0c0c0c;
+  scrollbar-color: #777 transparent;
+}
+
+#card .repo-item {
+  min-height: 44px;
+  box-sizing: border-box;
+  background: transparent;
+  transition: background-color 120ms ease;
+}
+
+#card .repo-item:hover {
+  background: #222;
+  transform: none;
+}
+
+#card .spinner {
+  border-color: #444;
+  border-top-color: #ff477f;
+}
+
+#card a:focus-visible,
+#card button:focus-visible {
+  outline: 2px solid #ff477f;
+  outline-offset: 3px;
+}
+
+:root body .source-link {
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  left: calc(20px + env(safe-area-inset-left));
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 0 14px;
+  border: 1px solid #777;
+  border-radius: 0;
+  background: #090909;
+  color: #f5f5f5;
+  font-size: 12px;
+  backdrop-filter: none;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+:root body .source-link,
+:root body .source-link * {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-weight: 400;
+}
+
+:root body .source-link:hover {
+  border-color: #f5f5f5;
+  background: #222;
+  transform: none;
+  box-shadow: none;
+}
+
+:root body .source-link:focus-visible {
+  outline: 2px solid #ff477f;
+  outline-offset: 3px;
+}
+
+@media (max-width: 768px) {
+  :root body .source-link {
+    justify-content: center;
+    width: 44px;
+    padding: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  :root body .source-link {
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    left: calc(12px + env(safe-area-inset-left));
+  }
+}
