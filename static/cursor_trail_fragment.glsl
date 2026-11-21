@@ -4,6 +4,7 @@ uniform float u_time;
 uniform sampler2D u_noise;
 uniform sampler2D u_buffer;
 uniform bool u_renderpass;
+uniform bool u_touch;
 
 const float blurMultiplier = 0.95;
 const float circleSize = .25;
@@ -77,7 +78,7 @@ void main() {
 			1.0
 		);
 		vec3 n = hash33(vec3(uv, u_time * .1));
-		fragcolour = vec3(smoothstep(circleSize, 0., length(uv)));
+		fragcolour = u_touch ? vec3(0.) : vec3(smoothstep(circleSize, 0., length(uv)));
 		tex.rgb += n * .2 - .1;
 		tex.rgb = vec3(dot(tex.rgb, vec3(0.299, 0.587, 0.114)));
 	}
