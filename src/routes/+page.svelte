@@ -6,7 +6,10 @@
 </script>
 
 <main class="portfolio">
-  <Card sourceRepo="https://github.com/Qezta/divit" />
+  <Card
+    sourceRepo="https://github.com/Qezta/divit"
+    portraitSrc="./pp_ascii.svg"
+  />
 </main>
 <SiteFooter />
 <Terminal />
