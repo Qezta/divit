@@ -93,6 +93,7 @@ pnpm dev        # vite dev server
 pnpm check      # svelte-check
 pnpm lint       # prettier + eslint
 pnpm build      # production build (Vercel output)
+pnpm build:ipfs # static mirror in build/ipfs, with chat disabled
 ```
 
 ## Environment

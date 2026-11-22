@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "vp dev",
     "build": "vp build",
+    "build:ipfs": "VITE_IPFS_MIRROR=1 vp build",
     "preview": "vp preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
+    "@sveltejs/adapter-static": "^3.0.11",
     "@sveltejs/adapter-vercel": "^6.3.3",
     "@sveltejs/kit": "^2.63.1",
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
@@ -37,7 +39,7 @@
   },
   "dependencies": {
     "@google/genai": "^1.0.0",
-    "@qezta/ui": "github:Qezta/ui#6dade765b3384b7ba0c22d3a7045b0569903758f",
+    "@qezta/ui": "github:Qezta/ui#2ef29363c2dc6a2979f5d9b3535459785673eb03",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "sass": "^1.89.0",

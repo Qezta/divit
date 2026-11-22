@@ -4,14 +4,18 @@
   import { onMount } from "svelte";
   import { browser } from "$app/environment";
   import "@qezta/ui/styles/global.scss";
-  import "@qezta/ui/styles/fonts.scss";
+  import "$lib/styles/fonts.css";
   import Cursor from "@qezta/ui/components/atoms/Cursor.svelte";
   import TouchCursor from "@qezta/ui/components/atoms/TouchCursor.svelte";
   import Chatbot from "$lib/components/Chatbot.svelte";
   import { burst } from "@qezta/ui/cursor";
 
-  injectSpeedInsights();
-  injectAnalytics();
+  const ipfsMirror = import.meta.env.VITE_IPFS_MIRROR === "1";
+
+  if (!ipfsMirror) {
+    injectSpeedInsights();
+    injectAnalytics();
+  }
 
   let playClickSound: (() => void) | undefined;
 
@@ -74,5 +78,7 @@
 
 <Cursor />
 <TouchCursor />
-<Chatbot />
+{#if !ipfsMirror}
+  <Chatbot />
+{/if}
 <slot />

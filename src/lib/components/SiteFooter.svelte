@@ -6,7 +6,11 @@
     >
     <a href="ssh://divit@qezta.com" title="ssh divit@qezta.com">SSH</a>
   </nav>
-  <p>Also available over Tor.</p>
+  {#if import.meta.env.VITE_IPFS_MIRROR === "1"}
+    <p>Chat is available on the HTTPS site.</p>
+  {:else}
+    <p>Also available over Tor.</p>
+  {/if}
 </footer>
 
 <style>

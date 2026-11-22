@@ -12,8 +12,8 @@ importers:
         specifier: ^1.0.0
         version: 1.52.0
       '@qezta/ui':
-        specifier: github:Qezta/ui#6dade765b3384b7ba0c22d3a7045b0569903758f
-        version: https://codeload.github.com/Qezta/ui/tar.gz/6dade765b3384b7ba0c22d3a7045b0569903758f(svelte@5.56.3(@typescript-eslint/types@8.59.3))(three@0.178.0)
+        specifier: github:Qezta/ui#2ef29363c2dc6a2979f5d9b3535459785673eb03
+        version: https://codeload.github.com/Qezta/ui/tar.gz/2ef29363c2dc6a2979f5d9b3535459785673eb03(svelte@5.56.3(@typescript-eslint/types@8.59.3))(three@0.178.0)
       '@vercel/analytics':
         specifier: ^1.5.0
         version: 1.6.1(@sveltejs/kit@2.63.1(@sveltejs/vite-plugin-svelte@7.1.2(svelte@5.56.3(@typescript-eslint/types@8.59.3))(vite@8.0.16(@types/node@24.13.1)(sass@1.99.0)))(svelte@5.56.3(@typescript-eslint/types@8.59.3))(typescript@5.9.3)(vite@8.0.16(@types/node@24.13.1)(sass@1.99.0)))(svelte@5.56.3(@typescript-eslint/types@8.59.3))
@@ -30,6 +30,9 @@ importers:
       '@eslint/js':
         specifier: ^9.18.0
         version: 9.39.4
+      '@sveltejs/adapter-static':
+        specifier: ^3.0.11
+        version: 3.0.11(@sveltejs/kit@2.63.1(@sveltejs/vite-plugin-svelte@7.1.2(svelte@5.56.3(@typescript-eslint/types@8.59.3))(vite@8.0.16(@types/node@24.13.1)(sass@1.99.0)))(svelte@5.56.3(@typescript-eslint/types@8.59.3))(typescript@5.9.3)(vite@8.0.16(@types/node@24.13.1)(sass@1.99.0)))
       '@sveltejs/adapter-vercel':
         specifier: ^6.3.3
         version: 6.3.3(@sveltejs/kit@2.63.1(@sveltejs/vite-plugin-svelte@7.1.2(svelte@5.56.3(@typescript-eslint/types@8.59.3))(vite@8.0.16(@types/node@24.13.1)(sass@1.99.0)))(svelte@5.56.3(@typescript-eslint/types@8.59.3))(typescript@5.9.3)(vite@8.0.16(@types/node@24.13.1)(sass@1.99.0)))
@@ -746,8 +749,8 @@ packages:
   '@protobufjs/utf8@1.1.1':
     resolution: {integrity: sha512-oOAWABowe8EAbMyWKM0tYDKi8Yaox52D+HWZhAIJqQXbqe0xI/GV7FhLWqlEKreMkfDjshR5FKgi3mnle0h6Eg==}
 
-  '@qezta/ui@https://codeload.github.com/Qezta/ui/tar.gz/6dade765b3384b7ba0c22d3a7045b0569903758f':
-    resolution: {tarball: https://codeload.github.com/Qezta/ui/tar.gz/6dade765b3384b7ba0c22d3a7045b0569903758f}
+  '@qezta/ui@https://codeload.github.com/Qezta/ui/tar.gz/2ef29363c2dc6a2979f5d9b3535459785673eb03':
+    resolution: {tarball: https://codeload.github.com/Qezta/ui/tar.gz/2ef29363c2dc6a2979f5d9b3535459785673eb03}
     version: 0.0.1
     peerDependencies:
       svelte: ^5.56.3
@@ -861,6 +864,11 @@ packages:
     resolution: {integrity: sha512-4WfKk68eTih+MiJD4fSbxN7E8kVBmTMPWHUPYjvl2N0rMs53YLTT8/YjKU5Dtnz5LqDjl7LEw4U7lXR2W3J5WA==}
     peerDependencies:
       acorn: ^8.9.0
+
+  '@sveltejs/adapter-static@3.0.11':
+    resolution: {integrity: sha512-DyX1bWx9uiPxzq7Mr+jnxqY+w3UhE3pYy5D1LcfdS++2KZTHSZBD60BoP44LjVgtGILfeOQCF8ESqzmLVrz4Ng==}
+    peerDependencies:
+      '@sveltejs/kit': ^2.0.0
 
   '@sveltejs/adapter-vercel@6.3.3':
     resolution: {integrity: sha512-jI7jT/XqRyFe9oqKvFcNPQfyNBi3pXqN1iQXa2lmeKT5Vzgr9iSOqJOD3pXf/9Q2Os6SXzqYYm6osRjHYEhkyw==}
@@ -2699,7 +2707,7 @@ snapshots:
 
   '@protobufjs/utf8@1.1.1': {}
 
-  '@qezta/ui@https://codeload.github.com/Qezta/ui/tar.gz/6dade765b3384b7ba0c22d3a7045b0569903758f(svelte@5.56.3(@typescript-eslint/types@8.59.3))(three@0.178.0)':
+  '@qezta/ui@https://codeload.github.com/Qezta/ui/tar.gz/2ef29363c2dc6a2979f5d9b3535459785673eb03(svelte@5.56.3(@typescript-eslint/types@8.59.3))(three@0.178.0)':
     dependencies:
       '@fortawesome/free-brands-svg-icons': 6.7.2
       '@fortawesome/free-solid-svg-icons': 6.7.2
@@ -2769,6 +2777,10 @@ snapshots:
   '@sveltejs/acorn-typescript@1.0.10(acorn@8.16.0)':
     dependencies:
       acorn: 8.16.0
+
+  '@sveltejs/adapter-static@3.0.11(@sveltejs/kit@2.63.1(@sveltejs/vite-plugin-svelte@7.1.2(svelte@5.56.3(@typescript-eslint/types@8.59.3))(vite@8.0.16(@types/node@24.13.1)(sass@1.99.0)))(svelte@5.56.3(@typescript-eslint/types@8.59.3))(typescript@5.9.3)(vite@8.0.16(@types/node@24.13.1)(sass@1.99.0)))':
+    dependencies:
+      '@sveltejs/kit': 2.63.1(@sveltejs/vite-plugin-svelte@7.1.2(svelte@5.56.3(@typescript-eslint/types@8.59.3))(vite@8.0.16(@types/node@24.13.1)(sass@1.99.0)))(svelte@5.56.3(@typescript-eslint/types@8.59.3))(typescript@5.9.3)(vite@8.0.16(@types/node@24.13.1)(sass@1.99.0))
 
   '@sveltejs/adapter-vercel@6.3.3(@sveltejs/kit@2.63.1(@sveltejs/vite-plugin-svelte@7.1.2(svelte@5.56.3(@typescript-eslint/types@8.59.3))(vite@8.0.16(@types/node@24.13.1)(sass@1.99.0)))(svelte@5.56.3(@typescript-eslint/types@8.59.3))(typescript@5.9.3)(vite@8.0.16(@types/node@24.13.1)(sass@1.99.0)))':
     dependencies:
