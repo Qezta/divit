@@ -5,6 +5,44 @@
   box-shadow: none;
 }
 
+/* Group the portrait and name into one header above the full-width content. */
+main.portfolio #card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(0.875rem, 2vw, 1.5rem);
+}
+
+/* The shared card wraps the heading and sections in a plain div. */
+.portfolio #card #card-container {
+  display: contents;
+}
+
+.portfolio #card #image {
+  margin: 0;
+}
+
+.portfolio #card #image img {
+  width: clamp(4.5rem, 12vw, 9rem);
+  border-radius: 0 !important;
+  box-shadow: 0 0 0 1px #444;
+}
+
+.portfolio #card h1 {
+  margin: 0;
+  text-wrap: balance;
+}
+
+.portfolio #card h1 > svg {
+  display: none;
+}
+
+.portfolio #card #molecules {
+  grid-column: 1 / -1;
+  border-top: 1px solid #333;
+  padding-top: clamp(0.875rem, 2vw, 1.5rem);
+}
+
 #card .badge,
 #card .terminal-hint code,
 #card .category-count,
@@ -143,13 +181,5 @@
   :root body .source-link {
     bottom: calc(12px + env(safe-area-inset-bottom));
     left: calc(12px + env(safe-area-inset-left));
-  }
-}
-
-@media (min-width: 1551px) {
-  /* The scroll container clips the portrait if it overhangs the card. */
-  #card #image {
-    margin: 0;
-    flex: none;
   }
 }
