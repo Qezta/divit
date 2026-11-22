@@ -27,7 +27,7 @@
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background: #000 url("/shader-grain.png") repeat;
+    background: #000 var(--shader-grain) repeat;
     background-size: 256px 256px;
   }
 

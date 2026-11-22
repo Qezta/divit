@@ -1,5 +1,6 @@
 /* global THREE */
 (() => {
+  const assets = new URL(".", document.currentScript?.src || document.baseURI);
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
   let dispose;
   let generation = 0;
@@ -29,6 +30,10 @@
     dispose = cleanup;
     const fallback = () => {
       cleanup();
+      document.body.style.setProperty(
+        "--shader-grain",
+        `url("${new URL("shader-grain.png", assets).href}")`,
+      );
       document.body.classList.add("portfolio-static");
     };
     if (typeof THREE === "undefined") return fallback();
@@ -37,7 +42,9 @@
       const shaders = await Promise.all(
         ["/cursor_trail_vertex.glsl", "/cursor_trail_fragment.glsl"].map(
           async (url) => {
-            const response = await fetch(url, { signal: listeners.signal });
+            const response = await fetch(new URL(url.slice(1), assets), {
+              signal: listeners.signal,
+            });
             if (!response.ok)
               throw new Error(
                 `Unable to load background shader: ${response.status}`,
