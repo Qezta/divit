@@ -1,4 +1,5 @@
 <script>
+  import "$lib/styles/portfolio.css";
   import Card from "@qezta/ui/components/organisms/Card.svelte";
   import SiteFooter from "$lib/components/SiteFooter.svelte";
   import Terminal from "$lib/components/Terminal.svelte";
