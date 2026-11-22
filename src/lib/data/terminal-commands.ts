@@ -97,11 +97,7 @@ and production ML deployment.`
     description: 'List projects',
     execute: (args) => {
       const filter = args[0]?.replace('--', '');
-      let filtered = projects;
-
-      if (filter && ['ml', 'infrastructure', 'functional'].includes(filter)) {
-        filtered = projects.filter((p) => p.category === filter);
-      }
+      const filtered = filter ? projects.filter((p) => p.category === filter) : projects;
 
       if (filtered.length === 0) {
         return {
@@ -266,10 +262,17 @@ infrastructure!`
 };
 
 export function executeCommand(input: string): CommandResponse {
-  const [cmd, ...args] = input.trim().split(/\s+/);
+  const trimmed = input.trim();
+  const [cmd, ...args] = trimmed.split(/\s+/);
 
   if (!cmd) {
     return { output: '' };
+  }
+
+  // Multi-word commands ('sudo rm -rf /') are keyed by the whole line.
+  const exact = commands[trimmed.replace(/\s+/g, ' ')];
+  if (exact) {
+    return exact.execute([]);
   }
 
   const command = commands[cmd];
