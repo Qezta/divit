@@ -55,18 +55,10 @@
       box-shadow: none;
     }
 
-    .portfolio :global(#image img) {
-      width: clamp(8rem, 30vw, 11rem);
-    }
-
     .portfolio :global(h1) {
       font-size: clamp(1.5rem, 6vw, 2rem);
       letter-spacing: 0.08em;
       margin-block: 0.5rem;
-    }
-
-    .portfolio :global(#card-container) {
-      gap: 1rem;
     }
 
     .portfolio :global(#molecules) {
