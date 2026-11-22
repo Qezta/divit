@@ -5,6 +5,10 @@
       >HTTPS</a
     >
     <a href="ssh://divit@qezta.com" title="ssh divit@qezta.com">SSH</a>
+    {#if import.meta.env.VITE_IPFS_MIRROR !== "1"}
+      <a href="ipns://divit.qezta.com/" title="Open with an IPFS client">IPFS</a
+      >
+    {/if}
   </nav>
   {#if import.meta.env.VITE_IPFS_MIRROR === "1"}
     <p>Chat is available on the HTTPS site.</p>
