@@ -145,3 +145,11 @@
     left: calc(12px + env(safe-area-inset-left));
   }
 }
+
+@media (min-width: 1551px) {
+  /* The scroll container clips the portrait if it overhangs the card. */
+  #card #image {
+    margin: 0;
+    flex: none;
+  }
+}
