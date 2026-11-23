@@ -18,6 +18,13 @@
   let terminalElement: HTMLDivElement;
   let inputElement: HTMLInputElement;
   let isVisible = false;
+  let isFullscreen = false;
+
+  function toggleFullscreen() {
+    isFullscreen = !isFullscreen;
+    if (window.matchMedia("(pointer: fine)").matches) focusInput();
+    else panelElement?.focus();
+  }
   let toggleElement: HTMLButtonElement;
   let panelElement: HTMLDivElement;
 
@@ -121,21 +128,24 @@ about  background & experience`,
       if (window.matchMedia("(pointer: fine)").matches) focusInput();
       else panelElement?.focus();
     } else {
+      isFullscreen = false;
       toggleElement?.focus();
     }
   }
 
   function handleWindowKeydown(event: KeyboardEvent) {
-    if (isVisible && event.key === "Escape") {
-      event.preventDefault();
-      toggleTerminal();
-    }
+    if (!isVisible || event.key !== "Escape") return;
+    event.preventDefault();
+    if (isFullscreen) isFullscreen = false;
+    else toggleTerminal();
   }
 
   onMount(() => {
     const closeOtherPanel = (event: Event) => {
-      if ((event as CustomEvent<string>).detail !== "terminal")
+      if ((event as CustomEvent<string>).detail !== "terminal") {
         isVisible = false;
+        isFullscreen = false;
+      }
     };
     window.addEventListener("portfolio-panel", closeOtherPanel);
     return () => window.removeEventListener("portfolio-panel", closeOtherPanel);
@@ -184,6 +194,7 @@ about  background & experience`,
 {#if isVisible}
   <div
     class="terminal-container"
+    class:fullscreen={isFullscreen}
     id="portfolio-terminal"
     role="dialog"
     aria-labelledby="terminal-title"
@@ -194,13 +205,25 @@ about  background & experience`,
       <div class="terminal-title" id="terminal-title">
         terminal <span>/ divit</span>
       </div>
-      <button
-        class="terminal-close"
-        on:click={toggleTerminal}
-        aria-label="Close Terminal"
-      >
-        ✕
-      </button>
+      <div class="terminal-actions">
+        <button
+          class="terminal-action"
+          on:click={toggleFullscreen}
+          aria-pressed={isFullscreen}
+          aria-label={isFullscreen
+            ? "Exit fullscreen terminal"
+            : "Fullscreen terminal"}
+        >
+          {isFullscreen ? "⊟" : "⊞"}
+        </button>
+        <button
+          class="terminal-close"
+          on:click={toggleTerminal}
+          aria-label="Close Terminal"
+        >
+          ✕
+        </button>
+      </div>
     </div>
 
     <div
@@ -311,6 +334,16 @@ about  background & experience`,
     max-height: calc(
       100dvh - 96px - env(safe-area-inset-bottom) - env(safe-area-inset-top)
     );
+
+    &.fullscreen {
+      inset: 12px;
+      width: auto;
+      height: auto;
+      max-width: none;
+      max-height: none;
+      z-index: 1100;
+    }
+
     border: 1px solid #777;
     border-radius: 0;
     background: #090909;
@@ -334,6 +367,11 @@ about  background & experience`,
   .terminal-title span {
     color: #a3a3a3;
   }
+  .terminal-actions {
+    display: flex;
+    align-items: center;
+  }
+  .terminal-action,
   .terminal-close {
     min-width: 48px;
     min-height: 48px;
@@ -343,6 +381,7 @@ about  background & experience`,
     font-size: 18px;
     cursor: pointer;
   }
+  .terminal-action:hover,
   .terminal-close:hover {
     background: #222;
   }
@@ -410,7 +449,7 @@ about  background & experience`,
       padding: 0 10px;
       gap: 8px;
     }
-    .terminal-container {
+    .terminal-container:not(.fullscreen) {
       right: calc(12px + env(safe-area-inset-right));
       bottom: calc(68px + env(safe-area-inset-bottom));
       max-width: calc(
