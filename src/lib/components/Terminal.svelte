@@ -346,7 +346,7 @@ about  background & experience`,
 
     border: 1px solid #777;
     border-radius: 0;
-    background: #090909;
+    background: #131313eb;
     color: #eee;
   }
 
@@ -358,6 +358,7 @@ about  background & experience`,
     min-height: 52px;
     padding-left: 16px;
     border-bottom: 1px solid #444;
+    background: #131313cc;
   }
 
   .terminal-title {
