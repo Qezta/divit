@@ -16,9 +16,8 @@
     <p>Also available over Tor.</p>
   {/if}
   <p class="legal">
-    © 2025–2026 Divit Mittal. All rights reserved. The Qezta torus logo is a
-    trademark of Qezta. Qezta (OPC) Pvt. Ltd. is the intended registered name
-    and is not yet incorporated.
+    © 2025–2026 Qezta (OPC) Pvt. Ltd. All rights reserved. The Qezta torus
+    logo is a trademark of Qezta (OPC) Pvt. Ltd.
   </p>
 </footer>
 
