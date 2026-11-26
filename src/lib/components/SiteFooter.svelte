@@ -15,10 +15,6 @@
   {:else}
     <p>Also available over Tor.</p>
   {/if}
-  <p>
-    The Qezta torus logo™, including its animated version, is a trademark of
-    Qezta.
-  </p>
 </footer>
 
 <style>
