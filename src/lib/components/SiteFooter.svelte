@@ -15,6 +15,10 @@
   {:else}
     <p>Also available over Tor.</p>
   {/if}
+  <p class="legal">
+    © 2025–2026 Qezta (OPC) Pvt. Ltd. All rights reserved. The Qezta torus
+    logo is a trademark of Qezta (OPC) Pvt. Ltd.
+  </p>
 </footer>
 
 <style>
@@ -68,6 +72,10 @@
   p {
     margin: 0.25rem 0 0;
     color: #aaa;
+  }
+
+  .legal {
+    max-width: 40rem;
   }
 
   @media (max-width: 600px) {
